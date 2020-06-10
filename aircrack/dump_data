@@ -1,0 +1,2 @@
+airodump-ng --bssid E4:BE:ED:16:5C:D8 -c 1 --write WPAcrack alfa
+

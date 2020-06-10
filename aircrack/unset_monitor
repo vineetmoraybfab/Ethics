@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#Unset monitor mode
+ip link set alfa down
+iw dev alfa set type managed
+ip link set alfa up
+
+#Restart netowrk services
+systemctl restart NetworkManager wpa_supplicant.service
+systemctl restart hostapd dnsmasq
+
+echo "Done!!"

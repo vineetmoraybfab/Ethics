@@ -1,0 +1,15 @@
+#!/bin/bash
+
+#Disable network managers
+airmon-ng check kill
+
+#Set monitor mode
+ip link set alfa down
+iw dev alfa set type monitor
+ip link set alfa up
+iw alfa set txpower fixed 3000
+
+#Let airmon-ng display it is already in monitor mode
+airmon-ng start alfa
+
+echo "Done!!"

