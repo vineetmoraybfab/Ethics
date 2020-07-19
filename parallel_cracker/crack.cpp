@@ -14,8 +14,8 @@ std::string symbols("0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVW
 bool process(const std::string &s, const int rank) {
 
 	//std::cout << rank << "- " << s << '\n';
-	//return (s == "hello");
-	return (s == "!@#4Password");
+	return (s == "hello");
+	//return (s == "!@#4Password");
 	return false;
 }
 
@@ -60,12 +60,13 @@ int main (int argc, char *argv[]) {
 	for (i = min_len; i <= max_len; ++i) {
 
 		const cln::cl_I possibilities = cln::expt_pos(symbols.length(), i);	//std::pow(symbols.length(), i);
+		cln::cl_I j = possibilities;
 		if (rank == 0) {
 			std::cout << "\nAttempting for passwords of length [" << i << "] | Possibilities identified = " << possibilities << '\n';
 		}
 		int success = 0;
 
-		for (cln::cl_I j = rank; j < possibilities; j += size) {
+		for (j = rank; j < possibilities; j += size) {
 
 			std::string s(i, ' ');
 			cln::cl_I temp = j;
@@ -82,8 +83,9 @@ int main (int argc, char *argv[]) {
 		}
 
 		if (j < possibilities) {
-			std::cout << "Rank " << rank << " already found password : " << s << '\n';
+			std::cout << "Rank " << rank << " already found password : " << password << '\n';
 			#if defined(IMPATIENT)
+			std::cout << "Aborting since you are impatient!!\n";
 			MPI_Abort(MPI_COMM_WORLD, 0);
 			#endif
 			std::cout << "You can wait for a successful termination or terminate if you are in a hurry.\n";
