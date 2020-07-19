@@ -77,24 +77,33 @@ int main (int argc, char *argv[]) {
 			if (process(s, rank)) {
 				success = 1 + rank;
 				password = s;
-				std::cout << "Rank " << rank << " already found password : " << s << '\n';
-				#if defined(IMPATIENT)
-				MPI_Abort(MPI_COMM_WORLD, 0);
-				#endif
-				std::cout << "You can wait for a successful termination or terminate if you are in a hurry.\n";
 				break;
 			}
 		}
 
+		if (j < possibilities) {
+			std::cout << "Rank " << rank << " already found password : " << s << '\n';
+			#if defined(IMPATIENT)
+			MPI_Abort(MPI_COMM_WORLD, 0);
+			#endif
+			std::cout << "You can wait for a successful termination or terminate if you are in a hurry.\n";
+		}
+
 		int result = 0;
 		MPI_Allreduce(&success, &result, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+		//If result is non-zero, some process has the result.
 		if (result != 0) {
-			if (rank == 0) {
-				char tmp[i];
-				MPI_Recv(tmp, i, MPI_CHAR, result - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-				password = std::string(tmp);
-			} else if (success) {
-				MPI_Send(password.c_str(), i, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+			//If process 0 has result, no need for any special send-recvs.
+			if ((result - 1) != 0) {
+				if (rank == 0) {
+					char tmp[i];
+					//Receive the result answer to process 0 for printing.
+					MPI_Recv(tmp, i, MPI_CHAR, result - 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+					password = std::string(tmp);
+				} else if (success) {
+					//If THIS process contains result, send it to process 0.
+					MPI_Send(password.c_str(), i, MPI_CHAR, 0, 0, MPI_COMM_WORLD);
+				}
 			}
 			break;
 		}
