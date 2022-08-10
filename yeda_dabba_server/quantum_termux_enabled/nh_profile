@@ -1,0 +1,17 @@
+# ~/.profile: executed by Bourne-compatible login shells.
+
+if [ "$BASH" ]; then
+  if [ -f ~/.bashrc ]; then
+    . ~/.bashrc
+  fi
+fi
+
+mesg n 2> /dev/null || true
+
+# Add /system/xbin and /system/bin to PATH
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/system/xbin:/system/bin"
+
+sudo service nginx start
+sudo service php8.1-fpm start 
+sudo service supervisor start
+sudo /home/kali/shellinabox-2.20/shellinaboxd -b -t --css=/home/kali/shellinabox-2.20/shellinabox/white-on-black.css

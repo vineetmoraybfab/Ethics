@@ -1,0 +1,13 @@
+
+IS_BOOT=$(cat ~/.booted)
+
+if [ "${IS_BOOT}" = "1" ];
+then
+	echo 0 > ~/.booted
+	nohup ./yeda_daemon &
+	pkill nginx
+	pkill php
+	pkill shellinabox
+	pkill supervisor
+	nh -r
+fi
