@@ -1,0 +1,15 @@
+1) Please add the following to nginx/sites-enabled/default
+
+# top-level http config for websocket headers
+# If Upgrade is defined, Connection = upgrade
+# If Upgrade is empty, Connection = close
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+2) Comment location section /juplab in nginx/sites-enabled/default
+
+3) Un-comment location section /jupyter and rename to /juplab in nginx/sites-enabled/default
+
+4) In jupyterlab config file allow origin (c.ServerApp.allow_origin = '*')
